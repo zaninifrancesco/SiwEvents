@@ -1,7 +1,6 @@
 package it.uniroma3.siw_events.config;
 
-import it.uniroma3.siw_events.model.RoleName;
-import it.uniroma3.siw_events.service.CustomOAuth2UserService;
+import it.uniroma3.siw_events.service.CustomOidcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,40 +14,36 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    private CustomOidcUserService customOidcUserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    // Risorse statiche e pagine pubbliche
                     .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/eventi", "/eventi/{id}").permitAll()
-                    .requestMatchers("/oauth2/**", "/login/oauth2/code/google").permitAll() // Permetti accesso agli endpoint OAuth2
-
-                    // Rotte per utenti autenticati (USER o ADMIN)
-                    .requestMatchers("/dashboard", "/eventi/{id}/partecipa", "/eventi/nuovo", "/eventi/miei").hasAnyAuthority(RoleName.ROLE_USER.toString(), RoleName.ROLE_ADMIN.toString())
-
-                    // Rotte per amministratori (ADMIN)
-                    .requestMatchers("/admin/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
-
-                    .anyRequest().authenticated() // Tutte le altre richieste necessitano di autenticazione
+                    .requestMatchers("/oauth2/**", "/login/oauth2/code/google").permitAll()
+                    .requestMatchers("/login", "/login?error=true").permitAll()
+                    .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/dashboard", "/eventi/{id}/partecipa", "/eventi/nuovo", "/eventi/miei")
+                        .hasAnyAuthority("USER", "ADMIN")
+                    .anyRequest().authenticated()
             )
             .oauth2Login(oauth2Login ->
                 oauth2Login
-                    .loginPage("/login") // Pagina di login personalizzata (opzionale)
+                    .loginPage("/login")
                     .userInfoEndpoint(userInfoEndpoint ->
                         userInfoEndpoint
-                            .userService(customOAuth2UserService) // Servizio personalizzato
+                            .oidcUserService(customOidcUserService)
                     )
-                    .defaultSuccessUrl("/dashboard", true) // Reindirizza al dashboard dopo il login
-                    .failureUrl("/login?error=true") // Pagina in caso di errore di login
+                    .defaultSuccessUrl("/dashboard", true)
+                    .failureUrl("/login?error=true")
             )
             .logout(logout ->
                 logout
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/") // Reindirizza alla home page dopo il logout
+                    .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
             );

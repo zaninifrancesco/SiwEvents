@@ -64,8 +64,7 @@
                     <td th:text="${user.name}">Nome Utente</td>
                     <td th:text="${user.email}">email@example.com</td>
                     <td>
-                        <span th:each="role, iterStat : ${user.roles}"
-                              th:text="${role.name.toString().replace('ROLE_', '') + (!iterStat.last ? ', ' : '')}"
+                        <span th:text="${user.ruolo?.name()?.replace('_', ' ')}"
                               class="badge bg-info me-1"></span>
                     </td>
                     <td th:text="${user.googleId}">google_id_value</td>

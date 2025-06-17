@@ -26,13 +26,8 @@ public class User {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private RoleName ruolo;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Event> createdEvents = new HashSet<>();
@@ -88,12 +83,12 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public RoleName getRuolo() {
+        return ruolo;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRuolo(RoleName ruolo) {
+        this.ruolo = ruolo;
     }
 
     public Set<Event> getCreatedEvents() {
