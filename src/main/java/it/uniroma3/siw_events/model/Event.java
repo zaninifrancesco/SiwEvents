@@ -37,6 +37,8 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participants = new HashSet<>();
 
+    private String eventImageUrl; // Percorso dell'immagine dell'evento
+
     public Event() {
         this.createdAt = LocalDateTime.now();
     }
@@ -115,6 +117,14 @@ public class Event {
         this.participants = participants;
     }
 
+    public String getEventImageUrl() {
+        return eventImageUrl;
+    }
+
+    public void setEventImageUrl(String eventImageUrl) {
+        this.eventImageUrl = eventImageUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,4 +138,3 @@ public class Event {
         return Objects.hash(id);
     }
 }
-

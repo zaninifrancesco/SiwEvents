@@ -40,6 +40,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participations = new HashSet<>();
 
+    private String profileImageUrl; // Percorso dell'immagine del profilo
+
     public User() {
         this.createdAt = LocalDateTime.now();
     }
@@ -110,6 +112,14 @@ public class User {
         this.participations = participations;
     }
 
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,4 +133,3 @@ public class User {
         return Objects.hash(id, email);
     }
 }
-
