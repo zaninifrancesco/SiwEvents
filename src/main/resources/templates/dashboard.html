@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Utente - Partecipa</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 56px; } /* Adjust padding if using a fixed navbar */
+        .dashboard-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Partecipa</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/oauth2/authorization/google}">Login con Google</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container dashboard-container">
+    <h1 class="mb-4">Dashboard Utente</h1>
+
+    <div th:if="${userName}">
+        <p>Benvenuto/a, <strong th:text="${userName}">Nome Utente</strong>!</p>
+        <p th:if="${userEmail}">Email: <span th:text="${userEmail}"></span></p>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>I Miei Eventi Creati</h2>
+            <div th:if="${createdEvents != null and not #lists.isEmpty(createdEvents)}">
+                <ul class="list-group list-group-flush">
+                    <li th:each="event : ${createdEvents}" class="list-group-item">
+                        <a th:href="@{/eventi/{id}(id=${event.id})}" th:text="${event.title}">Titolo Evento</a>
+                        <span class="badge bg-secondary rounded-pill float-end" th:text="${#temporals.format(event.dateTime, 'dd/MM/yy HH:mm')}"></span>
+                    </li>
+                </ul>
+            </div>
+            <div th:if="${createdEvents == null or #lists.isEmpty(createdEvents)}">
+                <p>Non hai ancora creato nessun evento.</p>
+            </div>
+            <div class="mt-3">
+                <a th:href="@{/eventi/nuovo}" class="btn btn-primary">Crea Nuovo Evento</a>
+                <a th:href="@{/eventi/miei}" class="btn btn-secondary">Visualizza Tutti i Miei Eventi</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Le Mie Partecipazioni</h2>
+            <!-- Qui verrà visualizzata la lista degli eventi a cui l'utente partecipa -->
+            <p><em>Funzionalità in arrivo...</em></p>
+            <!-- Esempio: <a th:href="@{/partecipazioni/mie}" class="btn btn-info">Visualizza Le Mie Partecipazioni</a> -->
+        </div>
+    </div>
+
+    <!-- Sezione Admin (visibile solo agli admin) -->
+    <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="mt-5">
+        <h2>Pannello Amministrazione</h2>
+        <p>Accesso alle funzionalità di amministrazione.</p>
+        <a th:href="@{/admin/dashboard}" class="btn btn-danger">Vai al Pannello Admin</a>
+    </div>
+
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

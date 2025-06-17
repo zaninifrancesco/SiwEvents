@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${pageTitle} + ' - Partecipa'">Dashboard Admin - Partecipa</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 56px; }
+        .admin-container {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Partecipa</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard Utente</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    <a class="nav-link active" aria-current="page" th:href="@{/admin/dashboard}">Dashboard Admin</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container admin-container">
+    <h1 class="mb-4" th:text="${pageTitle}">Dashboard Amministrazione</h1>
+
+    <p>Benvenuto nell'area di amministrazione. Da qui puoi gestire utenti ed eventi.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestione Utenti</h5>
+                    <p class="card-text">Visualizza e gestisci gli utenti registrati nel sistema.</p>
+                    <a th:href="@{/admin/utenti}" class="btn btn-primary">Vai a Gestione Utenti</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestione Eventi</h5>
+                    <p class="card-text">Visualizza, modifica o elimina tutti gli eventi presenti nel sistema.</p>
+                    <a th:href="@{/admin/eventi}" class="btn btn-primary">Vai a Gestione Eventi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Potrebbe esserci un link per creare eventi come admin, se diverso dal form utente -->
+    <div class="mt-4">
+        <a th:href="@{/eventi/nuovo}" class="btn btn-success">Crea Nuovo Evento (come Admin)</a>
+        <!-- Oppure: <a th:href="@{/admin/eventi/nuovo}" class="btn btn-success">Crea Nuovo Evento (Admin Form)</a> -->
+    </div>
+
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

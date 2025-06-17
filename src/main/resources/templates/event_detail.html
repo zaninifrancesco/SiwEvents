@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${event.title} + ' - Dettagli Evento - Partecipa'">Dettaglio Evento - Partecipa</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 56px; } /* Adjust padding if using a fixed navbar */
+        .event-details-container {
+            margin-top: 20px;
+            margin-bottom: 40px; /* Added margin at the bottom */
+        }
+        .messages-container {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Partecipa</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/oauth2/authorization/google}">Login con Google</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container event-details-container">
+
+    <!-- Messaggi Flash -->
+    <div class="messages-container">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div th:if="${event}">
+        <h1 th:text="${event.title}">Titolo Evento</h1>
+        <hr>
+
+        <p><strong>Descrizione:</strong></p>
+        <p th:text="${event.description}">Descrizione dell'evento.</p>
+
+        <p><strong>Data e Ora:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data e Ora</span></p>
+        <p><strong>Luogo:</strong> <span th:text="${event.location}">Luogo dell'evento</span></p>
+        <p>
+            <strong>Partecipanti:</strong>
+            <span th:text="${currentParticipants}">0</span>
+            <span th:if="${event.maxParticipants != null}" th:text="' / ' + ${event.maxParticipants}"> / Max</span>
+            <span th:if="${event.maxParticipants == null}"> (Illimitati)</span>
+        </p>
+        <p><strong>Organizzato da:</strong> <span th:text="${event.createdBy.name}">Nome Organizzatore</span></p>
+        <p><em>Pubblicato il: <span th:text="${#temporals.format(event.createdAt, 'dd/MM/yyyy HH:mm')}">Data Creazione</span></em></p>
+
+        <!-- Pulsanti Partecipazione/Annullamento -->
+        <div class="mt-4" sec:authorize="isAuthenticated()">
+            <form th:if="${isUserParticipating}" method="post" th:action="@{/eventi/{id}/annulla-partecipazione(id=${event.id})}">
+                <button type="submit" class="btn btn-warning">Annulla Partecipazione</button>
+            </form>
+
+            <form th:if="${!isUserParticipating}" method="post" th:action="@{/eventi/{id}/partecipa(id=${event.id})}">
+                <button th:if="${event.maxParticipants == null or currentParticipants < event.maxParticipants}" type="submit" class="btn btn-success">Partecipa all'Evento</button>
+                <div th:if="${event.maxParticipants != null and currentParticipants >= event.maxParticipants}" class="alert alert-info mt-2">
+                    Posti Esauriti.
+                </div>
+            </form>
+        </div>
+        <div class="mt-3" sec:authorize="!isAuthenticated()">
+             <a th:href="@{/oauth2/authorization/google}" class="btn btn-primary">Login per partecipare</a>
+        </div>
+
+
+        <div class="mt-4">
+            <a th:href="@{/}" class="btn btn-secondary">Torna alla Lista Eventi</a>
+        </div>
+
+    </div>
+
+    <div th:if="${event == null}">
+        <p class="alert alert-warning">Evento non trovato.</p>
+        <a th:href="@{/}" class="btn btn-primary">Torna alla Home</a>
+    </div>
+
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
