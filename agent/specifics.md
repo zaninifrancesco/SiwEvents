@@ -9,10 +9,8 @@
 | description   | String   | Descrizione                            |
 | dateTime      | LocalDateTime | Data e ora dell'evento           |
 | location      | String   | Luogo (indirizzo testuale)             |
-| latitude      | Double   | Latitudine per mappa                   |
-| longitude     | Double   | Longitudine per mappa                  |
 | maxParticipants | Integer | Numero massimo partecipanti (null = illimitato) |
-| createdBy     | User     | Utente creatore (sempre ADMIN)        |
+| createdBy     | User     | Utente creatore (USER o ADMIN)        |
 | createdAt     | LocalDateTime | Data creazione evento            |
 | participants  | Set<Participation> | Lista partecipazioni         |rendering lato server tramite Thymeleaf** e **stile tramite Bootstrap**, progettata per la gestione e la partecipazione a eventi.
 
@@ -24,8 +22,9 @@
 - Permettere agli utenti autenticati tramite **OAuth2 (Google)** di:
   - Partecipare ad eventi esistenti
   - Gestire le proprie partecipazioni
+  - Creare nuovi eventi
 - Fornire agli **admin** pieno controllo su:
-  - Creazione e gestione eventi
+  - Gestione di **tutti** gli eventi (inclusi quelli creati dagli utenti)
   - Gestione utenti e partecipazioni
   - Dashboard amministrativa completa
 - Visualizzazione e interazione tramite **template HTML (Thymeleaf)** con interfaccia responsive grazie a **Bootstrap**
@@ -37,8 +36,8 @@
 | Ruolo   | Accesso              | Funzionalità                                                           |
 |---------|----------------------|------------------------------------------------------------------------|
 | GUEST   | Pubblico              | Visualizza tutti gli eventi pubblici                                  |
-| USER    | Autenticato via Google | Partecipa a eventi, gestisce le proprie partecipazioni               |
-| ADMIN   | Autenticato + ruolo  | Crea e gestisce eventi, gestisce utenti e partecipazioni, dashboard   |
+| USER    | Autenticato via Google | Partecipa a eventi, gestisce le proprie partecipazioni, **crea eventi** |
+| ADMIN   | Autenticato + ruolo  | Gestisce **tutti** gli eventi, gestisce utenti e partecipazioni, dashboard   |
 
 ---
 
@@ -112,8 +111,11 @@
 | title         | String   | Titolo dell’evento                     |
 | description   | String   | Descrizione                            |
 | dateTime      | LocalDateTime | Data e ora dell’evento           |
-| location      | String   | Luogo                                  |
-| createdBy     | User     | Utente creatore                        |
+| location      | String   | Luogo (indirizzo testuale)             |
+| maxParticipants | Integer | Numero massimo partecipanti (null = illimitato) |
+| createdBy     | User     | Utente creatore (USER o ADMIN)        |
+| createdAt     | LocalDateTime | Data creazione evento            |
+| participants  | Set<Participation> | Lista partecipazioni         |
 
 ---
 
@@ -137,6 +139,8 @@
 ### Autenticato (`USER`)
 - `/dashboard` – Pannello utente
 - `/eventi/{id}/partecipa` – Iscrizione evento
+- `/eventi/nuovo` – Form per creare un nuovo evento
+- `/eventi/miei` – Lista eventi creati dall'utente
 
 ### Amministratore (`ADMIN`)
 - `/admin/dashboard` – Dashboard amministrativa
@@ -183,8 +187,6 @@
    - `description` (Text)
    - `date_time` (Timestamp, Not Null)
    - `location` (Text) - Indirizzo testuale
-   - `latitude` (Decimal(10,8)) - Coordinate mappa
-   - `longitude` (Decimal(11,8)) - Coordinate mappa  
    - `max_participants` (Integer, Nullable)
    - `created_by` (FK → users.id, Not Null)
    - `created_at` (Timestamp, Default: NOW())
@@ -203,7 +205,7 @@
 - **User ↔ Event**: `@ManyToMany` attraverso `Participation` - Un utente può partecipare a molti eventi
 - **Event → Participation**: `@OneToMany` - Un evento ha molte partecipazioni
 
-### 📍 Funzionalità Mappa
+### 📍 Funzionalità Mappa (non implementabile ora ma forse in un futuro)
 
 - **Tecnologia**: OpenStreetMap + Leaflet.js (gratuito)
 - **Coordinate**: Latitudine e longitudine salvate nel database
@@ -243,3 +245,4 @@ ALTER TABLE events ADD CONSTRAINT chk_max_participants
 
 ```bash
 ./mvnw clean spring-boot:run
+```
