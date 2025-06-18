@@ -41,15 +41,15 @@
 <div class="container form-container">
     <h1 class="mb-4">Crea Nuovo Evento</h1>
 
-    <!-- Eventuale visualizzazione di errori di validazione -->
-    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
-        <p>Per favore, correggi gli errori qui sotto:</p>
-        <ul>
-            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
-        </ul>
-    </div>
+    <form th:action="@{/eventi/nuovo}" th:object="${event}" method="post">
+        <!-- Eventuale visualizzazione di errori di validazione -->
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+            <p>Per favore, correggi gli errori qui sotto:</p>
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
 
-    <form th:action="@{/eventi/nuovo}" th:object="${eventForm}" method="post">
         <div class="mb-3">
             <label for="title" class="form-label">Titolo Evento</label>
             <input type="text" class="form-control" id="title" th:field="*{title}" required>

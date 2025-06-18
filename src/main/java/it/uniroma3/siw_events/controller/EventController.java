@@ -99,59 +99,40 @@ public class EventController {
 
     @GetMapping("/eventi/nuovo")
     public String showCreateEventForm(Model model) {
-        model.addAttribute("eventForm", new Event());
+        model.addAttribute("event", new Event());
         return "event_form";
     }
 
     @PostMapping("/eventi/nuovo")
-    public String createEvent(@ModelAttribute("eventForm") Event event,
-                              @AuthenticationPrincipal OAuth2User principal,
-                              RedirectAttributes redirectAttributes, Model model) {
+    public String createEvent(@ModelAttribute Event event, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
         Optional<User> currentUserOptional = userService.getCurrentUser(principal);
-        if (currentUserOptional.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Utente non trovato. Impossibile creare l'evento.");
-            return "redirect:/eventi/nuovo";
-        }
-
-        // Validazione di base
-        if (event.getTitle() == null || event.getTitle().trim().isEmpty()) {
-            model.addAttribute("errorMessage", "Il titolo è obbligatorio.");
-            model.addAttribute("eventForm", event);
-            return "event_form";
-        }
-        if (event.getDateTime() == null) {
-            model.addAttribute("errorMessage", "La data e l'ora sono obbligatorie.");
-            model.addAttribute("eventForm", event);
-            return "event_form";
-        }
-        if (event.getDateTime().isBefore(LocalDateTime.now())) {
-            model.addAttribute("errorMessage", "La data dell'evento non può essere nel passato.");
-            model.addAttribute("eventForm", event);
-            return "event_form";
-        }
-
-        try {
-            eventService.createEvent(event, currentUserOptional.get());
+        if (currentUserOptional.isPresent()) {
+            User currentUser = currentUserOptional.get();
+            // Imposta la data e l'ora correnti se non sono state fornite dal form
+            if (event.getDateTime() == null) {
+                event.setDateTime(LocalDateTime.now()); // O gestisci come errore se deve essere impostato dall'utente
+            }
+            eventService.createEvent(event, currentUser);
             redirectAttributes.addFlashAttribute("successMessage", "Evento creato con successo!");
             return "redirect:/eventi/" + event.getId();
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Errore durante la creazione dell'evento: " + e.getMessage());
-            model.addAttribute("eventForm", event);
-            return "event_form";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi essere loggato per creare un evento.");
+            return "redirect:/login";
         }
     }
 
     @GetMapping("/eventi/miei")
-    public String showMyEvents(@AuthenticationPrincipal OAuth2User principal, Model model, RedirectAttributes redirectAttributes) {
+    public String showMyEvents(Model model, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
         Optional<User> currentUserOptional = userService.getCurrentUser(principal);
-        if (currentUserOptional.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Utente non trovato.");
-            return "redirect:/dashboard";
+        if (currentUserOptional.isPresent()) {
+            User currentUser = currentUserOptional.get();
+            model.addAttribute("events", eventService.findEventsCreatedBy(currentUser));
+            return "my_events";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi essere loggato per vedere i tuoi eventi.");
+            return "redirect:/login";
         }
-
-        User currentUser = currentUserOptional.get();
-        model.addAttribute("events", eventService.findEventsCreatedBy(currentUser));
-        model.addAttribute("pageTitle", "I Miei Eventi Creati");
-        return "my_events";
     }
+
+    // TODO: Aggiungere metodi per modificare ed eliminare eventi con controlli di autorizzazione
 }

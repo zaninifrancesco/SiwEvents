@@ -2,6 +2,7 @@ package it.uniroma3.siw_events.controller;
 
 import it.uniroma3.siw_events.model.User;
 import it.uniroma3.siw_events.service.EventService;
+import it.uniroma3.siw_events.service.ParticipationService;
 import it.uniroma3.siw_events.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,9 @@ public class DashboardController {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private ParticipationService participationService;
+
     @GetMapping("/dashboard")
     public String showDashboard(Model model, @AuthenticationPrincipal OAuth2User principal) {
         if (principal != null) {
@@ -31,7 +35,7 @@ public class DashboardController {
             if (currentUserOptional.isPresent()) {
                 User currentUser = currentUserOptional.get();
                 model.addAttribute("createdEvents", eventService.findEventsCreatedBy(currentUser));
-                // Aggiungeremo qui la logica per le partecipazioni
+                model.addAttribute("participations", participationService.getParticipationsByUser(currentUser));
             }
         }
         return "dashboard";

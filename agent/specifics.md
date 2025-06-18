@@ -31,16 +31,6 @@
 
 ---
 
-## 👤 Ruoli utente
-
-| Ruolo   | Accesso              | Funzionalità                                                           |
-|---------|----------------------|------------------------------------------------------------------------|
-| GUEST   | Pubblico              | Visualizza tutti gli eventi pubblici                                  |
-| USER    | Autenticato via Google | Partecipa a eventi, gestisce le proprie partecipazioni, **crea eventi** |
-| ADMIN   | Autenticato + ruolo  | Gestisce **tutti** gli eventi, gestisce utenti e partecipazioni, dashboard   |
-
----
-
 ## 🛠️ Tecnologie utilizzate
 
 - Java 17+
@@ -61,8 +51,7 @@
 
 - Autenticazione tramite Google OAuth2
 - Registrazione automatica dell’utente al primo login
-- Ruoli persistiti su database (`USER`, `ADMIN`)
-- Controllo accessi con Spring Security e `@PreAuthorize`
+- Controllo accessi con Spring Security
 - Pagine accessibili in base al ruolo (es. `/admin/**`, `/eventi/**`, `/login`, ecc.)
 
 ---
@@ -90,16 +79,6 @@
 | id        | Long   | Identificatore univoco       |
 | email     | String | Email unica dell’utente      |
 | name      | String | Nome visualizzato            |
-| roles     | Set<Role> | Ruoli associati all’utente   |
-
----
-
-### 🏷️ Role
-
-| Campo | Tipo              | Descrizione              |
-|-------|-------------------|--------------------------|
-| id    | Long              | PK                       |
-| name  | Enum (`ROLE_USER`, `ROLE_ADMIN`) | Nome del ruolo |
 
 ---
 
@@ -172,15 +151,6 @@
    - `google_id` (Unique) - ID Google OAuth2
    - `created_at` (Timestamp)
 
-2. **roles** (Ruoli)
-   - `id` (PK, Serial) 
-   - `name` (Unique) - ROLE_USER, ROLE_ADMIN
-
-3. **user_roles** (Tabella ponte Many-to-Many)
-   - `user_id` (FK → users.id)
-   - `role_id` (FK → roles.id)
-   - Chiave primaria composta (user_id, role_id)
-
 4. **events** (Eventi)
    - `id` (PK, Serial)
    - `title` (Not Null)
@@ -200,7 +170,6 @@
 
 ### 🔗 Relazioni JPA
 
-- **User ↔ Role**: `@ManyToMany` con tabella ponte `user_roles`
 - **User → Event**: `@OneToMany` (createdBy) - Un utente può creare molti eventi
 - **User ↔ Event**: `@ManyToMany` attraverso `Participation` - Un utente può partecipare a molti eventi
 - **Event → Participation**: `@OneToMany` - Un evento ha molte partecipazioni

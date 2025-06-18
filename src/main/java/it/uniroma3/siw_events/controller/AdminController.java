@@ -1,5 +1,6 @@
 package it.uniroma3.siw_events.controller;
 
+import it.uniroma3.siw_events.service.EventService;
 import it.uniroma3.siw_events.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventService eventService; // Aggiunto per la gestione eventi da admin
+
     @GetMapping("/dashboard")
     public String showAdminDashboard(Model model) {
         model.addAttribute("pageTitle", "Dashboard Amministrazione");
@@ -26,4 +30,14 @@ public class AdminController {
         model.addAttribute("pageTitle", "Gestione Utenti");
         return "admin/manage_users";
     }
+
+    @GetMapping("/eventi")
+    public String manageEvents(Model model) {
+        model.addAttribute("events", eventService.findAllEvents());
+        model.addAttribute("pageTitle", "Gestione Eventi");
+        return "admin/manage_events"; // Dovrai creare questo template
+    }
+
+    // TODO: Aggiungere metodi per creare/modificare/eliminare eventi da admin
+    // TODO: Aggiungere metodi per modificare ruoli utenti
 }
