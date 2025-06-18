@@ -65,6 +65,12 @@
                         <span th:if="${event.maxParticipants == null}"> (Illimitati)</span>
                     </p>
                     <p class="mb-1"><strong>Organizzato da:</strong> <span th:text="${event.createdBy.name}">Nome Organizzatore</span></p>
+                    <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-3">
+                        <strong>Partecipanti:</strong>
+                        <ul class="ps-3 mb-0">
+                            <li th:each="part : ${event.participants}" th:text="${part.user.email}"></li>
+                        </ul>
+                    </div>
                     <p class="mb-3"><em>Pubblicato il: <span th:text="${#temporals.format(event.createdAt, 'dd/MM/yyyy HH:mm')}">Data Creazione</span></em></p>
                     <div class="mt-4" sec:authorize="isAuthenticated()">
                         <form th:if="${isUserParticipating}" method="post" th:action="@{/eventi/{id}/annulla-partecipazione(id=${event.id})}">

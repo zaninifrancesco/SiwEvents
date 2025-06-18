@@ -54,6 +54,12 @@
                         <strong>Data:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data</span><br>
                         <strong>Luogo:</strong> <span th:text="${event.location}">Luogo</span>
                     </p>
+                    <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-2">
+                        <strong>Partecipanti:</strong>
+                        <ul class="ps-3 mb-0">
+                            <li th:each="part : ${event.participants}" th:text="${part.user.email}"></li>
+                        </ul>
+                    </div>
                     <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-primary mt-auto">Dettagli</a>
                 </div>
             </div>
