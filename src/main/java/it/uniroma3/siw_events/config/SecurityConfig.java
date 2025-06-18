@@ -26,7 +26,7 @@ public class SecurityConfig {
                     .requestMatchers("/oauth2/**", "/login/oauth2/code/google").permitAll()
                     .requestMatchers("/login", "/login?error=true").permitAll()
                     .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                    .requestMatchers("/dashboard", "/eventi/{id}/partecipa", "/eventi/nuovo", "/eventi/miei")
+                    .requestMatchers("/dashboard", "/eventi/{id}/partecipa", "/eventi/nuovo")
                         .hasAnyAuthority("USER", "ADMIN")
                     .anyRequest().authenticated()
             )

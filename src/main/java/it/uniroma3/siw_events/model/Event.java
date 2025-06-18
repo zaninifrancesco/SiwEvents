@@ -17,7 +17,6 @@ public class Event {
     @Column(nullable = false)
     private String title;
 
-    @Lob
     private String description;
 
     @Column(nullable = false)

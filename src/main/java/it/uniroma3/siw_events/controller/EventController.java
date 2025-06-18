@@ -120,19 +120,6 @@ public class EventController {
             return "redirect:/login";
         }
     }
-
-    @GetMapping("/eventi/miei")
-    public String showMyEvents(Model model, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
-        Optional<User> currentUserOptional = userService.getCurrentUser(principal);
-        if (currentUserOptional.isPresent()) {
-            User currentUser = currentUserOptional.get();
-            model.addAttribute("events", eventService.findEventsCreatedBy(currentUser));
-            return "my_events";
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Devi essere loggato per vedere i tuoi eventi.");
-            return "redirect:/login";
-        }
-    }
-
+    
     // TODO: Aggiungere metodi per modificare ed eliminare eventi con controlli di autorizzazione
 }

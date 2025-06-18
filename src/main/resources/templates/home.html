@@ -5,25 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Partecipa - Eventi</title>
     <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { padding-top: 56px; } /* Adjust padding if using a fixed navbar */
-        .event-card {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Partecipa</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+            Siw Events
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Link di navigazione verranno aggiunti qui (es. Login, Dashboard) -->
+                <!-- Link di navigazione -->
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/oauth2/authorization/google}">Login con Google</a>
                 </li>
@@ -31,7 +28,9 @@
                     <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="nav-link btn btn-link" style="display: inline; cursor: pointer; color: #ffc107;">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -39,22 +38,23 @@
 </nav>
 
 <div class="container mt-4">
-    <h1 class="mb-4">Eventi in Programma</h1>
+    <h1 class="section-title">Eventi in Programma</h1>
 
     <div th:if="${events.isEmpty()}">
-        <p>Al momento non ci sono eventi in programma.</p>
+        <p class="no-events">Al momento non ci sono eventi in programma.</p>
     </div>
 
     <div class="row" th:if="${!events.isEmpty()}">
-        <div class="col-md-4" th:each="event : ${events}">
-            <div class="card event-card">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${event.title}">Titolo Evento</h5>
-                    <p class="card-text">
+        <div class="col-md-6 col-lg-4 d-flex align-items-stretch" th:each="event : ${events}">
+            <div class="card event-card w-100">
+                <img th:src="@{/uploads/event_images/{id}.jpg(id=${event.id})}" class="event-img" alt="Immagine evento">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-2" th:text="${event.title}">Titolo Evento</h5>
+                    <p class="card-text mb-3">
                         <strong>Data:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data</span><br>
                         <strong>Luogo:</strong> <span th:text="${event.location}">Luogo</span>
                     </p>
-                    <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-primary">Dettagli</a>
+                    <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-primary mt-auto">Dettagli</a>
                 </div>
             </div>
         </div>
