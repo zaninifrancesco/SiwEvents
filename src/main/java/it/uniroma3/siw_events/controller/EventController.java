@@ -3,6 +3,7 @@ package it.uniroma3.siw_events.controller;
 import it.uniroma3.siw_events.model.Event;
 import it.uniroma3.siw_events.model.User;
 import it.uniroma3.siw_events.service.EventService;
+import it.uniroma3.siw_events.service.ImageService;
 import it.uniroma3.siw_events.service.ParticipationService;
 import it.uniroma3.siw_events.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -30,6 +33,9 @@ public class EventController {
 
     @Autowired
     private ParticipationService participationService;
+
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/")
     public String showHomePage(Model model) {
@@ -104,13 +110,17 @@ public class EventController {
     }
 
     @PostMapping("/eventi/nuovo")
-    public String createEvent(@ModelAttribute Event event, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
+    public String createEvent(@ModelAttribute Event event, @RequestParam("imageFile") MultipartFile imageFile, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
         Optional<User> currentUserOptional = userService.getCurrentUser(principal);
         if (currentUserOptional.isPresent()) {
             User currentUser = currentUserOptional.get();
             // Imposta la data e l'ora correnti se non sono state fornite dal form
             if (event.getDateTime() == null) {
                 event.setDateTime(LocalDateTime.now()); // O gestisci come errore se deve essere impostato dall'utente
+            }
+            if (!imageFile.isEmpty()) {
+                String imageUrl = imageService.saveImage(imageFile);
+                event.setEventImageUrl(imageUrl);
             }
             eventService.createEvent(event, currentUser);
             redirectAttributes.addFlashAttribute("successMessage", "Evento creato con successo!");

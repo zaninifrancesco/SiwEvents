@@ -100,6 +100,14 @@ public class Event {
         this.createdBy = createdBy;
     }
 
+    public String getEventImageUrl() {
+        return eventImageUrl;
+    }
+
+    public void setEventImageUrl(String eventImageUrl) {
+        this.eventImageUrl = eventImageUrl;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -114,14 +122,6 @@ public class Event {
 
     public void setParticipants(Set<Participation> participants) {
         this.participants = participants;
-    }
-
-    public String getEventImageUrl() {
-        return eventImageUrl;
-    }
-
-    public void setEventImageUrl(String eventImageUrl) {
-        this.eventImageUrl = eventImageUrl;
     }
 
     @Override

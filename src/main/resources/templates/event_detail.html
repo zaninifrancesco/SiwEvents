@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div th:if="${event}">
-                    <img th:src="@{/uploads/event_images/{id}.jpg(id=${event.id})}" class="event-img mb-4" alt="Immagine evento">
+                    <img th:if="${event.eventImageUrl}" th:src="@{${event.eventImageUrl}}" class="event-img mb-4" alt="Immagine evento">
                     <h1 class="card-title mb-3" th:text="${event.title}">Titolo Evento</h1>
                     <hr>
                     <p class="mb-2"><strong>Descrizione:</strong></p>

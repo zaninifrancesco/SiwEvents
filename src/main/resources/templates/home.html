@@ -47,7 +47,7 @@
     <div class="row" th:if="${!events.isEmpty()}">
         <div class="col-md-6 col-lg-4 d-flex align-items-stretch" th:each="event : ${events}">
             <div class="card event-card w-100">
-                <img th:src="@{/uploads/event_images/{id}.jpg(id=${event.id})}" class="event-img" alt="Immagine evento">
+                <img th:if="${event.eventImageUrl}" th:src="@{${event.eventImageUrl}}" class="event-img" alt="Immagine evento">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-2" th:text="${event.title}">Titolo Evento</h5>
                     <p class="card-text mb-3">
