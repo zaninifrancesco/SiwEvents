@@ -68,5 +68,14 @@ public class ParticipationService {
     public long countByEvent(Event event){
         return participationRepository.countByEvent(event);
     }
+
+    @Transactional
+    public void removeParticipantFromEvent(Long userId, Long eventId) {
+        Optional<Participation> participationOpt = participationRepository.findByUserAndEvent(
+                new User() {{ setId(userId); }},
+                new Event() {{ setId(eventId); }}
+        );
+        participationOpt.ifPresent(participationRepository::delete);
+    }
 }
 

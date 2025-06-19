@@ -209,4 +209,27 @@ public class EventController {
         redirectAttributes.addFlashAttribute("errorMessage", "Evento non trovato.");
         return "redirect:/";
     }
+
+    @PostMapping("/eventi/{eventId}/rimuovi-partecipante/{userId}")
+    public String removeParticipant(@PathVariable("eventId") Long eventId,
+                                    @PathVariable("userId") Long userId,
+                                    @AuthenticationPrincipal OAuth2User principal,
+                                    RedirectAttributes redirectAttributes) {
+        Optional<Event> eventOptional = eventService.findEventById(eventId);
+        Optional<User> currentUserOptional = userService.getCurrentUser(principal);
+        if (eventOptional.isPresent() && currentUserOptional.isPresent()) {
+            Event event = eventOptional.get();
+            User currentUser = currentUserOptional.get();
+            if (event.getCreatedBy().getId().equals(currentUser.getId())) {
+                // Solo il proprietario può rimuovere partecipanti
+                participationService.removeParticipantFromEvent(userId, eventId);
+                redirectAttributes.addFlashAttribute("successMessage", "Partecipante rimosso con successo.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Non sei autorizzato a rimuovere partecipanti da questo evento.");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Evento o utente non trovato.");
+        }
+        return "redirect:/eventi/" + eventId;
+    }
 }

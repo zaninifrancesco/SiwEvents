@@ -68,7 +68,12 @@
                     <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-3">
                         <strong>Partecipanti:</strong>
                         <ul class="ps-3 mb-0">
-                            <li th:each="part : ${event.participants}" th:text="${part.user.email}"></li>
+                            <li th:each="part : ${event.participants}" class="d-flex align-items-center justify-content-between">
+                                <span th:text="${part.user.email}"></span>
+                                <form th:if="${currentUser != null and event.createdBy.id == currentUser.id and part.user.id != event.createdBy.id}" th:action="@{/eventi/{eventId}/rimuovi-partecipante/{userId}(eventId=${event.id},userId=${part.user.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger ms-2" onclick="return confirm('Vuoi davvero rimuovere questo partecipante?');">Rimuovi</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                     <p class="mb-3"><em>Pubblicato il: <span th:text="${#temporals.format(event.createdAt, 'dd/MM/yyyy HH:mm')}">Data Creazione</span></em></p>
