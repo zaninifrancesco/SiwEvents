@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                    .requestMatchers("/", "/css/**", "/js/**", "/uploads/**", "/webjars/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/eventi", "/eventi/{id}").permitAll()
                     .requestMatchers("/oauth2/**", "/login/oauth2/code/google").permitAll()
                     .requestMatchers("/login", "/login?error=true").permitAll()
