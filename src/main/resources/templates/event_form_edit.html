@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Evento</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+            Siw Events
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="event-card p-4 mb-4">
+                <h1 class="section-title mb-4">Modifica il tuo Evento</h1>
+                <form th:action="@{/eventi/{id}/modifica(id=${event.id})}" th:object="${event}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titolo:</label>
+                        <input type="text" id="title" class="form-control" th:field="*{title}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione:</label>
+                        <textarea id="description" class="form-control" th:field="*{description}" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dateTime" class="form-label">Data e Ora:</label>
+                        <input type="datetime-local" id="dateTime" class="form-control" th:field="*{dateTime}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Luogo:</label>
+                        <input type="text" id="location" class="form-control" th:field="*{location}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxParticipants" class="form-label">Numero Massimo Partecipanti:</label>
+                        <input type="number" id="maxParticipants" class="form-control" th:field="*{maxParticipants}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageFile" class="form-label">Immagine Evento (lascia vuoto per non modificare):</label>
+                        <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+                        <p class="mt-2">Immagine attuale: <img th:src="@{${event.eventImageUrl}}" alt="Immagine Evento" width="100"></p>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+                        <a th:href="@{/dashboard}" class="btn btn-outline-secondary">Annulla</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -54,7 +54,9 @@ public class EventController {
             if (principal != null) {
                 Optional<User> currentUserOptional = userService.getCurrentUser(principal);
                 if (currentUserOptional.isPresent()) {
-                    model.addAttribute("isUserParticipating", participationService.isUserParticipating(currentUserOptional.get(), event));
+                    User currentUser = currentUserOptional.get();
+                    model.addAttribute("currentUser", currentUser);
+                    model.addAttribute("isUserParticipating", participationService.isUserParticipating(currentUser, event));
                 }
             }
             return "event_detail";
@@ -131,5 +133,80 @@ public class EventController {
         }
     }
     
-    // TODO: Aggiungere metodi per modificare ed eliminare eventi con controlli di autorizzazione
+    @GetMapping("/eventi/{id}/modifica")
+    public String showEditEventForm(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal OAuth2User principal) {
+        Optional<Event> eventOptional = eventService.findEventById(id);
+        Optional<User> currentUserOptional = userService.getCurrentUser(principal);
+
+        if (eventOptional.isPresent() && currentUserOptional.isPresent()) {
+            Event event = eventOptional.get();
+            User currentUser = currentUserOptional.get();
+
+            // Controlla se l'utente corrente è il creatore dell'evento confrontando gli ID
+            if (event.getCreatedBy().getId().equals(currentUser.getId())) {
+                model.addAttribute("event", event);
+                return "event_form_edit";
+            } else {
+                // Utente non autorizzato, reindirizza
+                return "redirect:/eventi/" + id;
+            }
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/eventi/{id}/modifica")
+    public String updateEvent(@PathVariable("id") Long id, @ModelAttribute("event") Event eventDetails,
+                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                              @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
+
+        Optional<Event> eventOptional = eventService.findEventById(id);
+        Optional<User> currentUserOptional = userService.getCurrentUser(principal);
+
+        if (eventOptional.isPresent() && currentUserOptional.isPresent()) {
+            Event existingEvent = eventOptional.get();
+            User currentUser = currentUserOptional.get();
+
+            if (existingEvent.getCreatedBy().getId().equals(currentUser.getId())) {
+                try {
+                    if (imageFile != null && !imageFile.isEmpty()) {
+                        String imageUrl = imageService.saveImage(imageFile);
+                        eventDetails.setEventImageUrl(imageUrl);
+                    } else {
+                        eventDetails.setEventImageUrl(existingEvent.getEventImageUrl());
+                    }
+                    eventService.updateEvent(id, eventDetails);
+                    redirectAttributes.addFlashAttribute("successMessage", "Evento aggiornato con successo!");
+                    return "redirect:/eventi/" + id;
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Errore durante l'aggiornamento: " + e.getMessage());
+                    return "redirect:/eventi/" + id + "/modifica";
+                }
+            } else {
+                return "redirect:/eventi/" + id;
+            }
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/eventi/{id}/elimina")
+    public String deleteEvent(@PathVariable("id") Long id, @AuthenticationPrincipal OAuth2User principal, RedirectAttributes redirectAttributes) {
+        Optional<Event> eventOptional = eventService.findEventById(id);
+        Optional<User> currentUserOptional = userService.getCurrentUser(principal);
+
+        if (eventOptional.isPresent() && currentUserOptional.isPresent()) {
+            Event event = eventOptional.get();
+            User currentUser = currentUserOptional.get();
+
+            if (event.getCreatedBy().getId().equals(currentUser.getId())) {
+                eventService.deleteEvent(id);
+                redirectAttributes.addFlashAttribute("successMessage", "Evento eliminato con successo!");
+                return "redirect:/dashboard";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Non sei autorizzato ad eliminare questo evento.");
+                return "redirect:/eventi/" + id;
+            }
+        }
+        redirectAttributes.addFlashAttribute("errorMessage", "Evento non trovato.");
+        return "redirect:/";
+    }
 }

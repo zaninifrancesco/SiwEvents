@@ -58,7 +58,12 @@
                         <ul class="list-group list-group-flush mb-3">
                             <li th:each="event : ${createdEvents}" class="list-group-item d-flex justify-content-between align-items-center">
                                 <a th:href="@{/eventi/{id}(id=${event.id})}" th:text="${event.title}" class="fw-semibold text-decoration-none">Titolo Evento</a>
-                                <span class="badge bg-secondary rounded-pill" th:text="${#temporals.format(event.dateTime, 'dd/MM/yy HH:mm')}"></span>
+                                <div class="btn-group" role="group">
+                                    <a th:href="@{/eventi/{id}/modifica(id=${event.id})}" class="btn btn-sm btn-outline-primary">Modifica</a>
+                                    <form th:action="@{/eventi/{id}/elimina(id=${event.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Elimina</button>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
