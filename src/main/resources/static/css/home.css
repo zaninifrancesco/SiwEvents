@@ -1,0 +1,93 @@
+/* home.css - Stile personalizzato per la home page di Siw Events */
+
+body {
+    background: #f8f9fa;
+}
+
+header.hero-home {
+    background: linear-gradient(90deg, #0d6efd 0%, #6ea8fe 100%);
+    color: #fff;
+    padding: 5rem 0 3rem 0;
+    text-align: center;
+    box-shadow: 0 4px 24px 0 #0d6efd22;
+}
+header.hero-home h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 12px #0d6efd80;
+}
+header.hero-home p {
+    font-size: 1.4rem;
+    color: #e3eafc;
+    margin-bottom: 2rem;
+}
+.cta-btn-home {
+    font-size: 1.2rem;
+    padding: 0.8rem 2.2rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    box-shadow: 0 2px 12px 0 #0d6efd33;
+    transition: background 0.2s, color 0.2s;
+}
+.cta-btn-home.btn-primary {
+    background: #fff;
+    color: #0d6efd;
+    border: none;
+}
+.cta-btn-home.btn-primary:hover {
+    background: #e3eafc;
+    color: #0a58ca;
+}
+
+.section-events {
+    padding: 3rem 0 2rem 0;
+}
+.section-events h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.card.event-card {
+    border-radius: 1.2rem;
+    border: none;
+    box-shadow: 0 2px 16px 0 #0d6efd18;
+    transition: transform 0.15s, box-shadow 0.15s;
+    background: #fff;
+}
+.card.event-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 8px 32px 0 #0d6efd33;
+}
+.event-img.card-img-top {
+    border-radius: 1.2rem 1.2rem 0 0;
+    object-fit: cover;
+    height: 220px;
+}
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.card-footer {
+    background: transparent;
+    border: none;
+}
+.badge.bg-success {
+    font-size: 1rem;
+    padding: 0.4em 1em;
+    border-radius: 1rem;
+}
+@media (max-width: 767px) {
+    header.hero-home {
+        padding: 3rem 0 1.5rem 0;
+    }
+    .section-events {
+        padding: 1.5rem 0 1rem 0;
+    }
+    .event-img.card-img-top {
+        height: 140px;
+    }
+}

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,8 +39,20 @@ public class EventController {
     private ImageService imageService;
 
     @GetMapping("/")
-    public String showHomePage(Model model) {
-        model.addAttribute("events", eventService.findAllEvents());
+    public String showHomePage(@RequestParam(value = "date", required = false) String date,
+                               Model model) {
+        List<Event> events = eventService.findAllEvents();
+        // Ordina per data dell'evento (dal più vicino al più lontano)
+        events.sort((e1, e2) -> e1.getDateTime().compareTo(e2.getDateTime()));
+        // Eventi in evidenza: primi 3 con più partecipanti
+        List<Event> featuredEvents = events.stream()
+            .sorted((e1, e2) -> Integer.compare(
+                e2.getParticipants() != null ? e2.getParticipants().size() : 0,
+                e1.getParticipants() != null ? e1.getParticipants().size() : 0))
+            .limit(3)
+            .toList();
+        model.addAttribute("events", events);
+        model.addAttribute("featuredEvents", featuredEvents);
         return "home";
     }
 

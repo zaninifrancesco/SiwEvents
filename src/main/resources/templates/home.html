@@ -6,6 +6,7 @@
     <title>Partecipa - Eventi</title>
     <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
 </head>
 <body>
 
@@ -37,35 +38,72 @@
     </div>
 </nav>
 
-<div class="container mt-4">
-    <h1 class="section-title">Eventi in Programma</h1>
-
-    <div th:if="${events.isEmpty()}">
-        <p class="no-events">Al momento non ci sono eventi in programma.</p>
+<header class="hero-home">
+    <div class="container">
+        <h1>Siw Events</h1>
+        <p>La piattaforma per scoprire, creare e condividere eventi con la community.<br>Partecipa, organizza e vivi nuove esperienze!</p>
+        <div class="mt-4">
+            <a th:href="@{/eventi/nuovo}" sec:authorize="isAuthenticated()" class="btn cta-btn-home btn-primary me-2">Crea Evento</a>
+            <a th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn cta-btn-home btn-primary">Registrati / Accedi</a>
+        </div>
     </div>
+</header>
 
-    <div class="row" th:if="${!events.isEmpty()}">
-        <div class="col-md-6 col-lg-4 d-flex align-items-stretch" th:each="event : ${events}">
-            <div class="card event-card w-100">
-                <img th:if="${event.eventImageUrl}" th:src="@{${event.eventImageUrl}}" class="event-img" alt="Immagine evento">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title mb-2" th:text="${event.title}">Titolo Evento</h5>
-                    <p class="card-text mb-3">
-                        <strong>Data:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data</span><br>
-                        <strong>Luogo:</strong> <span th:text="${event.location}">Luogo</span>
-                    </p>
-                    <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-2">
-                        <strong>Partecipanti:</strong>
-                        <ul class="ps-3 mb-0">
-                            <li th:each="part : ${event.participants}" th:text="${part.user.email}"></li>
-                        </ul>
+
+<section class="section-events">
+    <div class="container">
+        <h2>I prossimi eventi</h2>
+        <div th:if="${events.isEmpty()}">
+            <p class="no-events text-center">Al momento non ci sono eventi in programma.</p>
+        </div>
+        <div class="row" th:if="${!events.isEmpty()}">
+            <div class="col-md-6 col-lg-4 d-flex align-items-stretch" th:each="event : ${events}">
+                <div class="card event-card w-100 mb-4">
+                    <img th:if="${event.eventImageUrl}" th:src="@{${event.eventImageUrl}}" class="event-img card-img-top" alt="Immagine evento">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2 text-primary" th:text="${event.title}">Titolo Evento</h5>
+                        <p class="card-text mb-2">
+                            <strong>Data:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data</span><br>
+                            <strong>Luogo:</strong> <span th:text="${event.location}">Luogo</span>
+                        </p>
+                        <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-2">
+                            <span class="badge bg-success mb-2">Partecipanti: <span th:text="${#lists.size(event.participants)}"></span></span>
+                            <ul class="ps-3 mb-0 small">
+                                <li th:each="part : ${event.participants}" th:text="${part.user.email}"></li>
+                            </ul>
+                        </div>
+                        <div th:if="${event.maxParticipants != null and #lists.size(event.participants) >= event.maxParticipants}" class="alert alert-danger p-1 mt-2 mb-2 small text-center">Posti Esauriti</div>
+                        <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-outline-primary mt-auto">Dettagli</a>
                     </div>
-                    <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-primary mt-auto">Dettagli</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="featured-events-section">
+    <div class="container">
+        <h2 class="mb-4 text-center text-warning"><i class="bi bi-star-fill"></i> Eventi in Evidenza</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4 d-flex align-items-stretch" th:each="event : ${featuredEvents}">
+                <div class="card event-card w-100 mb-4 border-warning border-2" style="box-shadow: 0 4px 24px 0 #ffc10733;">
+                    <img th:if="${event.eventImageUrl}" th:src="@{${event.eventImageUrl}}" class="event-img card-img-top" alt="Immagine evento">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2 text-warning" th:text="${event.title}">Titolo Evento</h5>
+                        <p class="card-text mb-2">
+                            <strong>Data:</strong> <span th:text="${#temporals.format(event.dateTime, 'dd/MM/yyyy HH:mm')}">Data</span><br>
+                            <strong>Luogo:</strong> <span th:text="${event.location}">Luogo</span>
+                        </p>
+                        <div th:if="${event.participants != null and !#lists.isEmpty(event.participants)}" class="mb-2">
+                            <span class="badge bg-success mb-2">Partecipanti: <span th:text="${#lists.size(event.participants)}"></span></span>
+                        </div>
+                        <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-outline-warning mt-auto">Dettagli</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
