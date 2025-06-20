@@ -35,5 +35,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     // Altri metodi relativi all'utente possono essere aggiunti qui
 }

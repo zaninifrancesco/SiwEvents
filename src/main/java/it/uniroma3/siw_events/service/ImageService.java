@@ -13,6 +13,7 @@ import java.util.UUID;
 public class ImageService {
 
     private final Path root = Paths.get("uploads/event_images");
+    private final Path profileRoot = Paths.get("uploads/profile_images");
 
     public String saveImage(MultipartFile file) {
         try {
@@ -28,6 +29,30 @@ public class ImageService {
     }
 
     public void deleteImage(String filePath) {
+        try {
+            if (filePath != null && !filePath.isEmpty()) {
+                Path fileToDelete = Paths.get(filePath.substring(1)); // remove leading '/'
+                Files.deleteIfExists(fileToDelete);
+            }
+        } catch (IOException e) {
+            // Log the exception
+        }
+    }
+
+    public String saveProfileImage(MultipartFile file) {
+        try {
+            if (!Files.exists(profileRoot)) {
+                Files.createDirectories(profileRoot);
+            }
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Files.copy(file.getInputStream(), this.profileRoot.resolve(uniqueFileName));
+            return "/uploads/profile_images/" + uniqueFileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store the profile image. Error: " + e.getMessage());
+        }
+    }
+
+    public void deleteProfileImage(String filePath) {
         try {
             if (filePath != null && !filePath.isEmpty()) {
                 Path fileToDelete = Paths.get(filePath.substring(1)); // remove leading '/'

@@ -6,6 +6,7 @@
     <title>Dashboard Utente - Partecipa</title>
     <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -42,12 +43,33 @@
 <div class="container mt-4">
     <h1 class="section-title mb-4">Dashboard Utente</h1>
 
-    <div th:if="${userName}">
-        <div class="alert alert-light border-0 shadow-sm mb-4">
-            <span>Benvenuto/a, <strong th:text="${userName}">Nome Utente</strong>!</span>
-            <span th:if="${userEmail}" class="ms-3">Email: <span th:text="${userEmail}"></span></span>
+    <!-- SEZIONE UTENTE MIGLIORATA -->
+    <div class="user-profile-card card shadow-sm mb-5 p-4 d-flex flex-row align-items-center gap-4">
+        <div class="profile-img-wrapper position-relative" style="width:110px; height:110px;">
+            <img th:if="${user.profileImageUrl != null}" th:src="@{${user.profileImageUrl}}" class="profile-img rounded-circle border" alt="Foto profilo"/>
+            <img th:if="${user.profileImageUrl == null}" src="/img/default_profile.png" class="profile-img rounded-circle border" alt="Foto profilo"/>
+            <form id="profileImageForm" th:action="@{/dashboard/profile-image}" method="post" enctype="multipart/form-data" style="display:none">
+                <input id="profileImageInput" type="file" name="profileImage" accept="image/*" onchange="document.getElementById('profileImageForm').submit();">
+            </form>
+            <div class="edit-icon-overlay" onclick="document.getElementById('profileImageInput').click();" style="cursor:pointer; position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.25); border-radius:50%; opacity:0; transition:opacity 0.2s;">
+                <i class="bi bi-pencil-fill" style="font-size:2.2rem; color:#fff;"></i>
+            </div>
+        </div>
+        <div class="flex-grow-1">
+            <h4 class="mb-1" th:text="${user.name}">Nome Utente</h4>
+            <div class="text-muted mb-2" th:text="${user.email}">email@email.com</div>
         </div>
     </div>
+    <script>
+    // Mostra la matita solo al passaggio del mouse
+    document.addEventListener('DOMContentLoaded', function() {
+        var wrapper = document.querySelector('.profile-img-wrapper');
+        var overlay = wrapper.querySelector('.edit-icon-overlay');
+        wrapper.addEventListener('mouseenter', function() { overlay.style.opacity = 1; });
+        wrapper.addEventListener('mouseleave', function() { overlay.style.opacity = 0; });
+    });
+    </script>
+    <!-- FINE SEZIONE UTENTE -->
 
     <div class="row g-4">
         <div class="col-md-6">

@@ -69,7 +69,49 @@ body {
     text-align: center;
     margin-top: 2rem;
 }
+/* --- User Profile Card --- */
+.user-profile-card {
+    background: #fff;
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 4px 18px rgba(44,62,80,0.08);
+    margin-bottom: 2rem;
+    padding: 2rem 2.5rem;
+    align-items: center;
+}
+.profile-img-wrapper {
+    position: relative;
+    display: inline-block;
+}
+.profile-img-wrapper .edit-icon-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.25);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 2;
+}
+.profile-img-wrapper:hover .edit-icon-overlay {
+    opacity: 1;
+}
+.profile-img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #e9ecef;
+    background: #f3f3f3;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+    cursor: pointer;
+}
 @media (max-width: 767px) {
     .event-img { height: 120px; }
     .section-title { font-size: 1.5rem; }
+    .user-profile-card { flex-direction: column; padding: 1.2rem; }
+    .profile-img { width: 80px; height: 80px; }
 }
