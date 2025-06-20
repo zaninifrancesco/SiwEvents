@@ -5,7 +5,13 @@ body {
 }
 
 header.hero-home {
-    background: linear-gradient(90deg, #0d6efd 0%, #6ea8fe 100%);
+    min-height: 60vh;
+    background: url('/static/hero-bg.jpg') center/cover no-repeat, linear-gradient(120deg, #0d6efd 60%, #6ea8fe 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
     color: #fff;
     padding: 5rem 0 3rem 0;
     text-align: center;
@@ -29,7 +35,7 @@ header.hero-home p {
     border-radius: 2rem;
     font-weight: 700;
     box-shadow: 0 2px 12px 0 #0d6efd33;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.15s;
 }
 .cta-btn-home.btn-primary {
     background: #fff;
@@ -39,6 +45,39 @@ header.hero-home p {
 .cta-btn-home.btn-primary:hover {
     background: #e3eafc;
     color: #0a58ca;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 18px #ffc10755;
+}
+
+/* --- HOW IT WORKS SECTION --- */
+.how-it-works-section {
+    background: #f8f9fa;
+}
+.icon-box {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #0d6efd22;
+}
+
+/* --- FOOTER MODERNO --- */
+.footer {
+    background: #212529;
+    color: #fff;
+    border-top: 1px solid #343a40;
+}
+.footer a {
+    color: #ffc107;
+    font-size: 1.5rem;
+    transition: color 0.2s;
+}
+.footer a:hover {
+    color: #fff;
 }
 
 .section-events {
@@ -80,14 +119,127 @@ header.hero-home p {
     padding: 0.4em 1em;
     border-radius: 1rem;
 }
+
+/* HEADER PIÙ PICCOLO E MODERNO */
+.small-hero {
+    min-height: 180px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    background: url('/static/hero-bg.jpg') center/cover no-repeat, linear-gradient(120deg, #0d6efd 60%, #6ea8fe 100%);
+    border-radius: 2.5rem;
+    box-shadow: 0 8px 32px 0 #0d6efd22;
+    overflow: hidden;
+    position: relative;
+}
+.small-hero .hero-overlay {
+    border-radius: 2.5rem;
+    background: linear-gradient(120deg, #0d6efdcc 60%, #212529cc 100%);
+    opacity: 0.85;
+    z-index: 1;
+}
+.small-hero .container {
+    z-index: 2;
+}
+.small-hero h1, .small-hero p {
+    text-shadow: 0 2px 16px #0008;
+}
+
+/* --- TABELLA MODERNA DASHBOARD --- */
+.modern-table th, .modern-table td {
+    vertical-align: middle;
+    border: none;
+}
+.modern-table thead {
+    border-bottom: 2px solid #e3eafc;
+}
+.modern-table tbody tr {
+    transition: background 0.15s;
+}
+.modern-table tbody tr:hover {
+    background: #f8f9fa;
+}
+.modern-table img.object-fit-cover {
+    object-fit: cover;
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    border: 1px solid #e3eafc;
+}
+
+/* --- EVENT DETAIL MODERNO --- */
+.modern-event-detail {
+    border-radius: 2.2rem;
+    background: #fff;
+    box-shadow: 0 8px 32px 0 #0d6efd22;
+    overflow: hidden;
+    border: none;
+}
+.event-detail-img-wrapper {
+    position: relative;
+    min-height: 120px;
+    max-height: 220px;
+    overflow: hidden;
+}
+.event-detail-img {
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.95) saturate(1.1);
+}
+.event-detail-gradient {
+    background: linear-gradient(180deg, #0d6efd33 0%, #fff 100%);
+    opacity: 0.7;
+    z-index: 2;
+    pointer-events: none;
+}
+.modern-event-detail .badge {
+    font-size: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px #ffc10733;
+}
+.modern-event-detail .display-5 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.modern-event-detail .card-text {
+    font-size: 1.1rem;
+    color: #495057;
+}
+.modern-event-detail .btn {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+.modern-event-detail .bg-light {
+    background: #f8f9fa !important;
+}
+.modern-event-detail .rounded-pill {
+    border-radius: 2rem !important;
+}
+
 @media (max-width: 767px) {
     header.hero-home {
         padding: 3rem 0 1.5rem 0;
     }
+    .hero-home { min-height: 40vh; padding: 2rem 0; }
     .section-events {
         padding: 1.5rem 0 1rem 0;
     }
     .event-img.card-img-top {
         height: 140px;
     }
+    .how-it-works-section .icon-box { width: 48px; height: 48px; font-size: 1.5rem; }
+    .small-hero {
+        min-height: 100px;
+        border-radius: 1.2rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+    .small-hero .hero-overlay {
+        border-radius: 1.2rem;
+    }
+    .modern-event-detail { border-radius: 1.2rem; }
+    .event-detail-img-wrapper { min-height: 80px; max-height: 120px; }
+    .modern-event-detail .display-5 { font-size: 1.3rem; }
 }

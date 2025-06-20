@@ -7,12 +7,13 @@
     <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar py-3">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+        <a class="navbar-brand d-flex align-items-center gap-2 fs-3 fw-bold" th:href="@{/}">
             Siw Events
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -20,17 +21,17 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto gap-2">
                 <!-- Link di navigazione -->
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/oauth2/authorization/google}">Login con Google</a>
+                    <a class="nav-link btn btn-outline-light rounded-pill px-4" th:href="@{/oauth2/authorization/google}">Login con Google</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                    <a class="nav-link btn btn-outline-warning rounded-pill px-4" th:href="@{/dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post" class="d-inline">
-                        <button type="submit" class="nav-link btn btn-link" style="display: inline; cursor: pointer; color: #ffc107;">Logout</button>
+                        <button type="submit" class="nav-link btn btn-link rounded-pill px-4 text-warning" style="display: inline; cursor: pointer;">Logout</button>
                     </form>
                 </li>
             </ul>
@@ -38,13 +39,14 @@
     </div>
 </nav>
 
-<header class="hero-home">
-    <div class="container">
-        <h1>Siw Events</h1>
-        <p>La piattaforma per scoprire, creare e condividere eventi con la community.<br>Partecipa, organizza e vivi nuove esperienze!</p>
-        <div class="mt-4">
-            <a th:href="@{/eventi/nuovo}" sec:authorize="isAuthenticated()" class="btn cta-btn-home btn-primary me-2">Crea Evento</a>
-            <a th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn cta-btn-home btn-primary">Registrati / Accedi</a>
+<header class="hero-home position-relative d-flex align-items-center justify-content-center text-center rounded-5 shadow-lg mx-2 mt-4" style="min-height: 140px;">
+    <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100 rounded-5"></div>
+    <div class="container position-relative z-2 py-3">
+        <h1 class="display-5 fw-bold mb-2 text-white">Siw Events</h1>
+        <p class="lead text-white-50 mb-3">La piattaforma per scoprire, creare e condividere eventi con la community.<br>Partecipa, organizza e vivi nuove esperienze!</p>
+        <div class="mt-3 d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a th:href="@{/eventi/nuovo}" sec:authorize="isAuthenticated()" class="btn cta-btn-home btn-warning btn-lg rounded-pill px-5 shadow">Crea Evento <i class="bi bi-plus-circle ms-2"></i></a>
+            <a th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn cta-btn-home btn-primary btn-lg rounded-pill px-5 shadow">Registrati / Accedi <i class="bi bi-person-circle ms-2"></i></a>
         </div>
     </div>
 </header>
@@ -104,6 +106,47 @@
         </div>
     </div>
 </section>
+
+<!-- Sezione "Come funziona" -->
+<section class="how-it-works-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Come funziona</h2>
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="icon-box mb-2"><i class="bi bi-search display-5 text-primary"></i></div>
+                <h5>Scopri Eventi</h5>
+                <p class="small">Cerca tra centinaia di eventi nella tua zona e trova quello che fa per te.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="icon-box mb-2"><i class="bi bi-calendar-plus display-5 text-warning"></i></div>
+                <h5>Crea il tuo Evento</h5>
+                <p class="small">Organizza eventi e condividili con la community in pochi click.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="icon-box mb-2"><i class="bi bi-people display-5 text-success"></i></div>
+                <h5>Partecipa</h5>
+                <p class="small">Unisciti agli eventi che ti interessano e conosci nuove persone.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="icon-box mb-2"><i class="bi bi-star display-5 text-danger"></i></div>
+                <h5>Vivi Esperienze</h5>
+                <p class="small">Raccogli ricordi e lascia feedback sugli eventi a cui hai partecipato.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer moderno -->
+<footer class="footer bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <div class="mb-2">
+            <a href="#" class="text-warning me-3"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-warning me-3"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-warning"><i class="bi bi-envelope"></i></a>
+        </div>
+        <small>&copy; 2025 Siw Events. Tutti i diritti riservati.</small>
+    </div>
+</footer>
 
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
