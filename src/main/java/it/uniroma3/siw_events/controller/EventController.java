@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,13 +67,30 @@ public class EventController {
             model.addAttribute("event", event);
             model.addAttribute("currentParticipants", participationService.countByEvent(event));
 
+            boolean isUserParticipating = false;
             if (principal != null) {
                 Optional<User> currentUserOptional = userService.getCurrentUser(principal);
                 if (currentUserOptional.isPresent()) {
                     User currentUser = currentUserOptional.get();
                     model.addAttribute("currentUser", currentUser);
-                    model.addAttribute("isUserParticipating", participationService.isUserParticipating(currentUser, event));
+                    isUserParticipating = participationService.isUserParticipating(currentUser, event);
+                    model.addAttribute("isUserParticipating", isUserParticipating);
                 }
+            }
+            // Google Calendar URL solo se partecipa
+            if (isUserParticipating) {
+                String title = URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8);
+                String description = URLEncoder.encode(event.getDescription(), StandardCharsets.UTF_8);
+                String location = URLEncoder.encode(event.getLocation(), StandardCharsets.UTF_8);
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
+                String start = event.getDateTime().format(fmt);
+                String end = event.getDateTime().plusHours(4).format(fmt);
+                String gcalUrl = "https://www.google.com/calendar/render?action=TEMPLATE"
+                        + "&text=" + title
+                        + "&dates=" + start + "/" + end
+                        + "&details=" + description
+                        + "&location=" + location;
+                model.addAttribute("googleCalendarUrl", gcalUrl);
             }
             return "event_detail";
         } else {

@@ -94,6 +94,11 @@
                     <div class="mt-4" sec:authorize="isAuthenticated()">
                         <a th:if="${currentUser != null and event.createdBy.equals(currentUser)}" th:href="@{/eventi/{id}/modifica(id=${event.id})}" class="btn btn-primary">Modifica Evento</a>
                     </div>
+                    <div class="mt-4" sec:authorize="isAuthenticated()">
+    <a th:if="${isUserParticipating}" th:href="${googleCalendarUrl}" target="_blank" class="btn btn-success mt-2">
+        <i class="bi bi-calendar-plus"></i> Aggiungi a Google Calendar
+    </a>
+</div>
                     <div class="mt-4">
                         <a th:href="@{/}" class="btn btn-outline-secondary">Torna alla Lista Eventi</a>
                     </div>
