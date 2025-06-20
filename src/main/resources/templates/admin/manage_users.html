@@ -55,7 +55,7 @@
                     <th scope="col">Ruoli</th>
                     <th scope="col">Google ID</th>
                     <th scope="col">Data Creazione</th>
-                    <!-- <th scope="col">Azioni</th> -->
+                    <th scope="col">Azioni</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,11 +69,11 @@
                     </td>
                     <td th:text="${user.googleId}">google_id_value</td>
                     <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</td>
-                    <!--
                     <td>
-                        <a href="#" class="btn btn-sm btn-warning">Modifica Ruoli</a>
+                        <form th:action="@{'/admin/utenti/elimina/' + ${user.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">Elimina</button>
+                        </form>
                     </td>
-                    -->
                 </tr>
             </tbody>
         </table>

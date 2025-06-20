@@ -40,5 +40,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
     // Altri metodi relativi all'utente possono essere aggiunti qui
 }

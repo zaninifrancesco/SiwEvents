@@ -41,6 +41,25 @@
 <div class="container admin-container">
     <h1 class="mb-4" th:text="${pageTitle}">Dashboard Amministrazione</h1>
 
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Numero Eventi</h5>
+                    <p class="display-4 mb-0" th:text="${eventCount}">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Numero Utenti</h5>
+                    <p class="display-4 mb-0" th:text="${userCount}">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <p>Benvenuto nell'area di amministrazione. Da qui puoi gestire utenti ed eventi.</p>
 
     <div class="row mt-4">

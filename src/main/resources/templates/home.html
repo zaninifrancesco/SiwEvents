@@ -48,6 +48,9 @@
             <a th:href="@{/eventi/nuovo}" sec:authorize="isAuthenticated()" class="btn cta-btn-home btn-warning btn-lg rounded-pill px-5 shadow">Crea Evento <i class="bi bi-plus-circle ms-2"></i></a>
             <a th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn cta-btn-home btn-primary btn-lg rounded-pill px-5 shadow">Registrati / Accedi <i class="bi bi-person-circle ms-2"></i></a>
         </div>
+        <div sec:authorize="hasAuthority('ADMIN')" class="mt-3 d-flex justify-content-center">
+            <a th:href="@{/admin/dashboard}" class="btn btn-outline-danger btn-lg rounded-pill px-5 shadow">Dashboard Admin</a>
+        </div>
     </div>
 </header>
 
