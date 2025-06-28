@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Galleria Foto Evento</title>
+</head>
+<body>
+<h2 th:text="${event.title}">Titolo Evento</h2>
+<a th:href="@{/event-photos/event/{id}/upload(id=${event.id})}" sec:authorize="isAuthenticated()">Carica una foto</a>
+
+<div th:if="${photos.isEmpty()}">
+    <p>Nessuna foto caricata per questo evento.</p>
+</div>
+<div th:if="${!photos.isEmpty()}">
+    <div th:each="photo : ${photos}">
+        <img th:if="${photo.filePath}" th:src="@{${photo.filePath}}" alt="Foto evento" style="max-width: 300px; max-height: 200px;"/>
+        <div th:if="${photo.description}">
+            <p th:text="${photo.description}"></p>
+        </div>
+        <p>Caricata da: <span th:text="${photo.author.email}"></span></p>
+        <form th:if="${currentUser != null and (photo.author.id == currentUser.id or currentUser.ruolo == 'ADMIN')}" th:action="@{/event-photos/delete/{photoId}(photoId=${photo.id})}" method="post">
+            <button type="submit">Elimina</button>
+        </form>
+        <hr/>
+    </div>
+</div>
+<a th:href="@{/eventi/{id}(id=${event.id})}">Torna ai dettagli evento</a>
+</body>
+</html>

@@ -74,9 +74,9 @@ public class EventController {
                     User currentUser = currentUserOptional.get();
                     model.addAttribute("currentUser", currentUser);
                     isUserParticipating = participationService.isUserParticipating(currentUser, event);
-                    model.addAttribute("isUserParticipating", isUserParticipating);
                 }
             }
+            model.addAttribute("isUserParticipating", isUserParticipating);
             // Google Calendar URL solo se partecipa
             if (isUserParticipating) {
                 String title = URLEncoder.encode(event.getTitle(), StandardCharsets.UTF_8);

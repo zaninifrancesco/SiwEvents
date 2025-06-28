@@ -92,19 +92,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex flex-wrap gap-2 mt-4">
-                            <form th:if="${isUserParticipating}" method="post" th:action="@{/eventi/{id}/annulla-partecipazione(id=${event.id})}">
+                        <div th:if="${isUserParticipating != null and isUserParticipating}" class="d-flex flex-wrap gap-2 mt-4">
+                            <form method="post" th:action="@{/eventi/{id}/annulla-partecipazione(id=${event.id})}">
                                 <button type="submit" class="btn btn-warning"><i class="bi bi-x-circle"></i> Annulla Partecipazione</button>
                             </form>
-                            <form th:if="${!isUserParticipating}" method="post" th:action="@{/eventi/{id}/partecipa(id=${event.id})}">
+                        </div>
+                        <div th:if="${isUserParticipating != null and !isUserParticipating}" class="d-flex flex-wrap gap-2 mt-4">
+                            <form method="post" th:action="@{/eventi/{id}/partecipa(id=${event.id})}">
                                 <button th:if="${event.maxParticipants == null or currentParticipants < event.maxParticipants}" type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Partecipa all'Evento</button>
                                 <span th:if="${event.maxParticipants != null and currentParticipants >= event.maxParticipants}" class="alert alert-info py-1 px-3 mb-0 align-self-center">Posti Esauriti</span>
                             </form>
-                            <a th:if="${!isUserParticipating}" th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn btn-primary"><i class="bi bi-person-circle"></i> Login per partecipare</a>
-                            <a th:if="${currentUser != null and event.createdBy.equals(currentUser)}" th:href="@{/eventi/{id}/modifica(id=${event.id})}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifica Evento</a>
-                            <a th:if="${isUserParticipating}" th:href="${googleCalendarUrl}" target="_blank" class="btn btn-outline-success"><i class="bi bi-calendar-plus"></i> Google Calendar</a>
-                            <a th:href="@{/}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Torna alla Lista Eventi</a>
+                            <a th:if="${currentUser == null}" th:href="@{/oauth2/authorization/google}" sec:authorize="!isAuthenticated()" class="btn btn-primary"><i class="bi bi-person-circle"></i> Login per partecipare</a>
                         </div>
+                        <a th:if="${currentUser != null and event.createdBy.equals(currentUser)}" th:href="@{/eventi/{id}/modifica(id=${event.id})}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifica Evento</a>
+                        <a th:if="${isUserParticipating}" th:href="${googleCalendarUrl}" target="_blank" class="btn btn-outline-success"><i class="bi bi-calendar-plus"></i> Google Calendar</a>
+                        <a th:href="@{/}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Torna alla Lista Eventi</a>
+                        <a th:href="@{/event-photos/event/{id}(id=${event.id})}" class="btn btn-outline-info">
+                            <i class="bi bi-images"></i> Galleria Foto Evento
+                        </a>
                     </div>
                     <div th:if="${event == null}">
                         <p class="alert alert-warning">Evento non trovato.</p>

@@ -14,6 +14,7 @@ public class ImageService {
 
     private final Path root = Paths.get("uploads/event_images");
     private final Path profileRoot = Paths.get("uploads/profile_images");
+    private final Path postedImagesRoot = Paths.get("uploads/event_posted_images");
 
     public String saveImage(MultipartFile file) {
         try {
@@ -22,6 +23,7 @@ public class ImageService {
             }
             String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.root.resolve(uniqueFileName));
+            System.out.println("PATH img: " + uniqueFileName);
             return "/uploads/event_images/" + uniqueFileName;
         } catch (IOException e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
@@ -60,6 +62,20 @@ public class ImageService {
             }
         } catch (IOException e) {
             // Log the exception
+        }
+    }
+
+    public String savePostedImage(MultipartFile file) {
+        try {
+            if (!Files.exists(postedImagesRoot)) {
+                Files.createDirectories(postedImagesRoot);
+            }
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Files.copy(file.getInputStream(), this.postedImagesRoot.resolve(uniqueFileName));
+            System.out.println("PATH posted img: " + uniqueFileName);
+            return "/uploads/event_posted_images/" + uniqueFileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store the posted image. Error: " + e.getMessage());
         }
     }
 }

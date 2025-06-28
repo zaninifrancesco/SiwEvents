@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Carica una foto evento</title>
+</head>
+<body>
+<h2 th:text="${event.title}">Carica una foto per l'evento</h2>
+<form th:action="@{/event-photos/event/{id}/upload(id=${event.id})}" method="post" enctype="multipart/form-data">
+    <label for="file">Scegli una foto:</label>
+    <input type="file" id="file" name="file" accept="image/*" required><br><br>
+    <label for="description">Descrizione (opzionale):</label><br>
+    <textarea id="description" name="description" rows="2" cols="40"></textarea><br><br>
+    <button type="submit">Carica</button>
+</form>
+<a th:href="@{/event-photos/event/{id}(id=${event.id})}">Torna alla galleria</a>
+</body>
+</html>
