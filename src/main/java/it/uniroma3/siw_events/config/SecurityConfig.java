@@ -24,6 +24,7 @@ public class SecurityConfig {
                     .requestMatchers("/", "/css/**", "/js/**", "/uploads/**", "/webjars/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/eventi", "/eventi/{id}").permitAll()
                     .requestMatchers("/oauth2/**", "/login/oauth2/code/google").permitAll()
+                    .requestMatchers("/event-photos/event/{id}").permitAll()
                     .requestMatchers("/login", "/login?error=true").permitAll()
                     .requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/dashboard", "/eventi/{id}/partecipa", "/eventi/nuovo")

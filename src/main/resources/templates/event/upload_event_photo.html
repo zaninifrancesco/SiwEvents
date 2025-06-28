@@ -2,17 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Carica una foto evento</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
 </head>
 <body>
-<h2 th:text="${event.title}">Carica una foto per l'evento</h2>
-<form th:action="@{/event-photos/event/{id}/upload(id=${event.id})}" method="post" enctype="multipart/form-data">
-    <label for="file">Scegli una foto:</label>
-    <input type="file" id="file" name="file" accept="image/*" required><br><br>
-    <label for="description">Descrizione (opzionale):</label><br>
-    <textarea id="description" name="description" rows="2" cols="40"></textarea><br><br>
-    <button type="submit">Carica</button>
-</form>
-<a th:href="@{/event-photos/event/{id}(id=${event.id})}">Torna alla galleria</a>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar py-3">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2 fs-3 fw-bold" th:href="@{/}">
+            Siw Events
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-2">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link btn btn-outline-light rounded-pill px-4" th:href="@{/oauth2/authorization/google}">Login con Google</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link btn btn-outline-warning rounded-pill px-4" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="nav-link btn btn-link rounded-pill px-4 text-warning" style="display: inline; cursor: pointer;">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card event-card p-4 shadow-sm">
+                <h2 class="section-title mb-4 text-center" th:text="${event.title}">Carica una foto per l'evento</h2>
+                <form th:action="@{/event-photos/event/{id}/upload(id=${event.id})}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Scegli una foto</label>
+                        <input type="file" id="file" name="file" accept="image/*" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione (opzionale)</label>
+                        <textarea id="description" name="description" rows="2" class="form-control" maxlength="500"></textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-upload"></i> Carica</button>
+                    </div>
+                </form>
+                <div class="mt-4 text-center">
+                    <a th:href="@{/event-photos/event/{id}(id=${event.id})}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Torna alla galleria</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

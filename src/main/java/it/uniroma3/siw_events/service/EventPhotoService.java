@@ -1,6 +1,7 @@
 package it.uniroma3.siw_events.service;
 
 import it.uniroma3.siw_events.model.EventPhoto;
+import it.uniroma3.siw_events.model.RoleName;
 import it.uniroma3.siw_events.model.Event;
 import it.uniroma3.siw_events.model.User;
 import it.uniroma3.siw_events.repository.EventPhotoRepository;
@@ -63,7 +64,7 @@ public class EventPhotoService {
         }
 
         // Se vuoi controllare il ruolo admin, aggiungi qui la logica
-        return user.getRuolo().equals("ADMIN");
+        return user.getRuolo().equals(RoleName.ADMIN);
     }
 
     public List<EventPhoto> getPhotosByEvent(Event event) {

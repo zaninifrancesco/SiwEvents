@@ -1,6 +1,7 @@
 package it.uniroma3.siw_events.controller;
 
 import it.uniroma3.siw_events.model.Event;
+import it.uniroma3.siw_events.model.RoleName;
 import it.uniroma3.siw_events.model.User;
 import it.uniroma3.siw_events.service.EventService;
 import it.uniroma3.siw_events.service.ParticipationService;
@@ -33,7 +34,7 @@ public class AdminController {
     public String showAdminDashboard(Model model, @AuthenticationPrincipal OAuth2User principal) {
         if (principal == null || userService.getCurrentUser(principal).isEmpty() ||
             userService.getCurrentUser(principal).get().getRuolo() == null ||
-            !userService.getCurrentUser(principal).get().getRuolo().name().equals("ADMIN")) {
+            !userService.getCurrentUser(principal).get().getRuolo().name().equals(RoleName.ADMIN)) {
             return "redirect:/";
         }
         model.addAttribute("pageTitle", "Dashboard Amministrazione");

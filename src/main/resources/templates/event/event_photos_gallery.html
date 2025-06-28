@@ -2,28 +2,68 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Galleria Foto Evento</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
 </head>
 <body>
-<h2 th:text="${event.title}">Titolo Evento</h2>
-<a th:href="@{/event-photos/event/{id}/upload(id=${event.id})}" sec:authorize="isAuthenticated()">Carica una foto</a>
-
-<div th:if="${photos.isEmpty()}">
-    <p>Nessuna foto caricata per questo evento.</p>
-</div>
-<div th:if="${!photos.isEmpty()}">
-    <div th:each="photo : ${photos}">
-        <img th:if="${photo.filePath}" th:src="@{${photo.filePath}}" alt="Foto evento" style="max-width: 300px; max-height: 200px;"/>
-        <div th:if="${photo.description}">
-            <p th:text="${photo.description}"></p>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-navbar py-3">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2 fs-3 fw-bold" th:href="@{/}">
+            Siw Events
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-2">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link btn btn-outline-light rounded-pill px-4" th:href="@{/oauth2/authorization/google}">Login con Google</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link btn btn-outline-warning rounded-pill px-4" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="nav-link btn btn-link rounded-pill px-4 text-warning" style="display: inline; cursor: pointer;">Logout</button>
+                    </form>
+                </li>
+            </ul>
         </div>
-        <p>Caricata da: <span th:text="${photo.author.email}"></span></p>
-        <form th:if="${currentUser != null and (photo.author.id == currentUser.id or currentUser.ruolo == 'ADMIN')}" th:action="@{/event-photos/delete/{photoId}(photoId=${photo.id})}" method="post">
-            <button type="submit">Elimina</button>
-        </form>
-        <hr/>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="section-title mb-4 text-center" th:text="${event.title}">Titolo Evento</h2>
+    <div class="text-end mb-4">
+        <a th:href="@{/event-photos/event/{id}/upload(id=${event.id})}" sec:authorize="isAuthenticated()" class="btn btn-primary"><i class="bi bi-upload"></i> Carica una foto</a>
+    </div>
+    <div th:if="${photos.isEmpty()}" class="alert alert-info text-center">
+        <p>Nessuna foto caricata per questo evento.</p>
+    </div>
+    <div th:if="${!photos.isEmpty()}" class="row g-4 justify-content-center">
+        <div th:each="photo : ${photos}" class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card event-card h-100 shadow-sm">
+                <img th:if="${photo.filePath}" th:src="@{${photo.filePath}}" alt="Foto evento" class="card-img-top event-img"/>
+                <div class="card-body">
+                    <div th:if="${photo.description}" class="mb-2">
+                        <p class="card-text" th:text="${photo.description}"></p>
+                    </div>
+                    <p class="mb-1 small text-muted">Caricata da: <span th:text="${photo.author.email}"></span></p>
+                    <form th:if="${currentUser != null and (photo.author.id == currentUser.id or currentUser.ruolo == 'ADMIN')}" th:action="@{/event-photos/delete/{photoId}(photoId=${photo.id})}" method="post" class="mt-2">
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-trash"></i> Elimina</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a th:href="@{/eventi/{id}(id=${event.id})}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Torna ai dettagli evento</a>
     </div>
 </div>
-<a th:href="@{/eventi/{id}(id=${event.id})}">Torna ai dettagli evento</a>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
