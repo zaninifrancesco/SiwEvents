@@ -37,7 +37,7 @@ public class ImageService {
                 Files.deleteIfExists(fileToDelete);
             }
         } catch (IOException e) {
-            // Log the exception
+            System.out.println("Errore delete image: " + e.getMessage());
         }
     }
 
@@ -54,16 +54,6 @@ public class ImageService {
         }
     }
 
-    public void deleteProfileImage(String filePath) {
-        try {
-            if (filePath != null && !filePath.isEmpty()) {
-                Path fileToDelete = Paths.get(filePath.substring(1)); // remove leading '/'
-                Files.deleteIfExists(fileToDelete);
-            }
-        } catch (IOException e) {
-            // Log the exception
-        }
-    }
 
     public String savePostedImage(MultipartFile file) {
         try {

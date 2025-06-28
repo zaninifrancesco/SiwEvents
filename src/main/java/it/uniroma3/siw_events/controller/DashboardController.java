@@ -56,7 +56,7 @@ public class DashboardController {
             User user = currentUserOptional.get();
             // Elimina la vecchia immagine se esiste
             if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
-                imageService.deleteProfileImage(user.getProfileImageUrl());
+                imageService.deleteImage(user.getProfileImageUrl());
             }
             String imageUrl = imageService.saveProfileImage(profileImage);
             user.setProfileImageUrl(imageUrl);
