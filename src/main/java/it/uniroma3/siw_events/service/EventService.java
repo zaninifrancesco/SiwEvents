@@ -18,7 +18,7 @@ public class EventService {
     private EventRepository eventRepository;
 
     @Autowired
-    private ImageService imageService; // Assicurati di avere un servizio per gestire le immagini
+    private ImageService imageService;
 
     @Transactional(readOnly = true)
     public List<Event> findAllEvents() {
@@ -34,7 +34,6 @@ public class EventService {
     public Event createEvent(Event event, User createdBy) {
         event.setCreatedBy(createdBy);
         event.setCreatedAt(LocalDateTime.now());
-        // Eventuali altre logiche di business prima del salvataggio
         return eventRepository.save(event);
     }
 
@@ -79,5 +78,4 @@ public class EventService {
         }
     }
 
-    // Metodi per aggiornare, eliminare eventi verranno aggiunti in seguito
 }

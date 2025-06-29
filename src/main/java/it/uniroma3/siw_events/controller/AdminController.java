@@ -34,7 +34,7 @@ public class AdminController {
     public String showAdminDashboard(Model model, @AuthenticationPrincipal OAuth2User principal) {
         if (principal == null || userService.getCurrentUser(principal).isEmpty() ||
             userService.getCurrentUser(principal).get().getRuolo() == null ||
-            !userService.getCurrentUser(principal).get().getRuolo().name().equals(RoleName.ADMIN)) {
+            !userService.getCurrentUser(principal).get().getRuolo().name().equals(RoleName.ADMIN.name())) {
             return "redirect:/";
         }
         model.addAttribute("pageTitle", "Dashboard Amministrazione");
@@ -86,6 +86,4 @@ public class AdminController {
         return "redirect:/admin/eventi";
     }
 
-    // TODO: Aggiungere metodi per creare/modificare/eliminare eventi da admin
-    // TODO: Aggiungere metodi per modificare ruoli utenti
 }

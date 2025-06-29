@@ -41,13 +41,11 @@ public class EventPhotoService {
             System.out.println("prima condizione");
             return false;
         }
-        // Usa la logica già usata nel progetto
         boolean isParticipant = participationService.isUserParticipating(user, event);
         if (!isParticipant) {
             System.out.println("Seconda condizione");
             return false;
         }
-        // Verifica che l'evento sia concluso (oggi > data evento + 1 giorno)
         
         return true;
     }
@@ -63,7 +61,6 @@ public class EventPhotoService {
             return true;
         }
 
-        // Se vuoi controllare il ruolo admin, aggiungi qui la logica
         return user.getRuolo().equals(RoleName.ADMIN);
     }
 
