@@ -33,7 +33,7 @@ public class ImageService {
     public void deleteImage(String filePath) {
         try {
             if (filePath != null && !filePath.isEmpty()) {
-                Path fileToDelete = Paths.get(filePath.substring(1)); // remove leading '/'
+                Path fileToDelete = Paths.get(filePath.substring(1));
                 Files.deleteIfExists(fileToDelete);
             }
         } catch (IOException e) {

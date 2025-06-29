@@ -26,7 +26,7 @@ public class UserService {
         if (principal == null) {
             return Optional.empty();
         }
-        String googleId = principal.getName(); // Per Google, getName() di solito restituisce l'ID 'sub'
+        String googleId = principal.getName();
         return userRepository.findByGoogleId(googleId);
     }
 
@@ -44,6 +44,4 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
-
-    // Altri metodi relativi all'utente possono essere aggiunti qui
 }

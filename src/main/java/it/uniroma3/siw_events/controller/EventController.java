@@ -151,7 +151,7 @@ public class EventController {
             User currentUser = currentUserOptional.get();
             // Imposta la data e l'ora correnti se non sono state fornite dal form
             if (event.getDateTime() == null) {
-                event.setDateTime(LocalDateTime.now()); // O gestisci come errore se deve essere impostato dall'utente
+                event.setDateTime(LocalDateTime.now()); 
             }
             if (!imageFile.isEmpty()) {
                 String imageUrl = imageService.saveImage(imageFile);
@@ -175,12 +175,10 @@ public class EventController {
             Event event = eventOptional.get();
             User currentUser = currentUserOptional.get();
 
-            // Controlla se l'utente corrente è il creatore dell'evento confrontando gli ID
             if (event.getCreatedBy().getId().equals(currentUser.getId())) {
                 model.addAttribute("event", event);
                 return "event_form_edit";
             } else {
-                // Utente non autorizzato, reindirizza
                 return "redirect:/eventi/" + id;
             }
         }
@@ -254,7 +252,6 @@ public class EventController {
             Event event = eventOptional.get();
             User currentUser = currentUserOptional.get();
             if (event.getCreatedBy().getId().equals(currentUser.getId())) {
-                // Solo il proprietario può rimuovere partecipanti
                 participationService.removeParticipantFromEvent(userId, eventId);
                 redirectAttributes.addFlashAttribute("successMessage", "Partecipante rimosso con successo.");
             } else {

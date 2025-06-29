@@ -20,7 +20,7 @@ public class ParticipationService {
     private ParticipationRepository participationRepository;
 
     @Autowired
-    private EventRepository eventRepository; // Potrebbe servire per aggiornare conteggi o altro
+    private EventRepository eventRepository;
 
     @Transactional(readOnly = true)
     public boolean isUserParticipating(User user, Event event) {
